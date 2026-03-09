@@ -205,6 +205,7 @@ def main(argv: list[str]) -> None:  # pylint: disable=unused-argument
         "BQML_RAG_CORPUS_NAME",
         "CODE_INTERPRETER_EXTENSION_NAME",
         "NL2SQL_METHOD",
+        "DATASET_CONFIG_FILE",
     ]
 
     skipped_vars: list[str] = []

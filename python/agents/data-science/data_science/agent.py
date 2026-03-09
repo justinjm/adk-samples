@@ -93,6 +93,15 @@ def load_dataset_config():
     if not dataset_config_file:
         _logger.fatal("DATASET_CONFIG_FILE env var not set")
 
+    # Resolve relative paths (e.g. "./foo.json") relative to this file's
+    # directory so the config is found correctly regardless of CWD — both
+    # when running locally from deployment/ and inside the deployed container.
+    if not os.path.isabs(dataset_config_file):
+        dataset_config_file = os.path.join(
+            os.path.dirname(__file__), dataset_config_file
+        )
+        dataset_config_file = os.path.normpath(dataset_config_file)
+
     with open(dataset_config_file, encoding="utf-8") as f:
         dataset_config = json.load(f)
 

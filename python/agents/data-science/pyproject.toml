@@ -51,6 +51,9 @@ known-first-party = ["data_science"]
 [tool.hatch.build.targets.wheel]
 # Maps the package source correctly for Hatchling
 packages = ["data_science"]
+# Include the dataset config JSON files so they are available inside the
+# deployed Agent Engine container.
+include = ["data_science/*.json"]
 
 [tool.pytest.ini_options]
 console_output_style = "progress"
