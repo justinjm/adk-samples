@@ -186,7 +186,7 @@ def get_root_agent() -> LlmAgent:
 
     agent = LlmAgent(
         model=os.getenv("ROOT_AGENT_MODEL", "gemini-2.5-flash"),
-        name=os.getenv("AGENT_ENGINE_DISPLAY_NAME", "data_science_multiagentv4"),
+        name="data_science_root_agent",
         instruction=return_instructions_root()
         + get_dataset_definitions_for_instructions(),
         global_instruction=(

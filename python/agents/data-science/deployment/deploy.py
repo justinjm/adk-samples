@@ -43,7 +43,7 @@ flags.DEFINE_bool("create", False, "Create a new agent.")
 flags.DEFINE_bool("delete", False, "Delete an existing agent.")
 flags.mark_bool_flags_as_mutual_exclusive(["create", "delete"])
 
-AGENT_WHL_FILE = "data_science-0.1-py3-none-any.whl"
+AGENT_WHL_FILE = "data_science-0.1.0-py3-none-any.whl"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -131,7 +131,7 @@ def create(env_vars: dict[str, str]) -> None:
     """Creates and deploys the agent."""
     adk_app = AdkApp(
         agent=root_agent,
-        enable_tracing=False,
+        enable_tracing=True, # TODO - move to .env ?
     )
 
     if not os.path.exists(AGENT_WHL_FILE):
@@ -143,6 +143,7 @@ def create(env_vars: dict[str, str]) -> None:
 
     remote_agent = agent_engines.create(
         adk_app,
+        display_name="data_science_multiagentv4", # TODO - move to .env ?
         requirements=[AGENT_WHL_FILE],
         extra_packages=[AGENT_WHL_FILE],
         env_vars=env_vars,

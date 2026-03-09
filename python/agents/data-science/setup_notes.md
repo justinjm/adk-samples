@@ -71,7 +71,7 @@ directory, run this command:
 uv build --wheel --out-dir deployment
 ```
 
-This will create a file named `data_science-0.1-py3-none-any.whl` in the
+This will create a file named `data_science-0.1.0-py3-none-any.whl` in the
 `deployment` directory.
 
 Then run the below command. This will create a staging bucket in your GCP
@@ -79,14 +79,15 @@ project and deploy the agent to Vertex AI Agent Engine:
 
 ```bash
 cd deployment/
-python3 deploy.py --create
-# uv run python3 deploy.py --create
+```
 
+```bash
+python3 deploy.py --create
 ```
 
 ```txt
-Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/2028595311114452992
+Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/
 To use this Extension in another session:
-extension = vertexai.preview.extensions.Extension('projects/647233624236/locations/us-central1/extensions/2028595311114452992')
+extension = vertexai.preview.extensions.Extension('projects/647233624236/locations/us-central1/extensions/zzzzzzzzzzz')
 
 ```
