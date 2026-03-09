@@ -80,4 +80,13 @@ project and deploy the agent to Vertex AI Agent Engine:
 ```bash
 cd deployment/
 python3 deploy.py --create
+# uv run python3 deploy.py --create
+
+```
+
+```txt
+Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/2028595311114452992
+To use this Extension in another session:
+extension = vertexai.preview.extensions.Extension('projects/647233624236/locations/us-central1/extensions/2028595311114452992')
+
 ```

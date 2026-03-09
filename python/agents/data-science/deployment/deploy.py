@@ -25,6 +25,10 @@ from google.cloud import storage
 from vertexai import agent_engines
 from vertexai.preview.reasoning_engines import AdkApp
 
+# Load .env before importing the agent, because the agent modules read
+# environment variables at import time (e.g. BQ_DATASET_ID in tools.py).
+load_dotenv()
+
 from data_science.agent import root_agent
 
 FLAGS = flags.FLAGS
@@ -167,7 +171,6 @@ def delete(resource_id: str) -> None:
 
 def main(argv: list[str]) -> None:  # pylint: disable=unused-argument
     """Main execution function."""
-    load_dotenv()
     env_vars = {}
 
     project_id = (
