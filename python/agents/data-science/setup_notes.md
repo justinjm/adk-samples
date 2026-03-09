@@ -91,3 +91,11 @@ To use this Extension in another session:
 extension = vertexai.preview.extensions.Extension('projects/647233624236/locations/us-central1/extensions/zzzzzzzzzzz')
 
 ```
+
+### deployment success
+
+```bash
+Successfully created agent: projects/647233624236/locations/us-central1/reasoningEngines/8621498272298565632
+```
+
+
