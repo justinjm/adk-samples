@@ -86,16 +86,21 @@ python3 deploy.py --create
 ```
 
 ```txt
-Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/
-To use this Extension in another session:
-extension = vertexai.preview.extensions.Extension('projects/647233624236/locations/us-central1/extensions/zzzzzzzzzzz')
+Creating Extension
+Create Extension backing LRO: projects/647233624236/locations/us-central1/extensions/3558200703304335360/operations/7488667465061236736
+Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/3558200703304335360
+
 
 ```
 
 ### deployment success
 
 ```bash
-Successfully created agent: projects/647233624236/locations/us-central1/reasoningEngines/8621498272298565632
+Successfully created agent: projects/647233624236/locations/us-central1/reasoningEngines/1470345013987639296
 ```
 
 
+## TODO 
+
+* [ ] create env-registration
+* [ ] register new agent to gemini enterprise
