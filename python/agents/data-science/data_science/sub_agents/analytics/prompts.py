@@ -80,6 +80,24 @@ def return_instructions_analytics() -> str:
     - Print variables (e.g., `print(f'{{variable=}}')`.
     - Give out the generated code under 'Code:'.
 
+  **Visualization Output:** When creating matplotlib plots, you MUST call
+  `plt.show()` as the LAST line after creating the plot. This is what triggers
+  the code executor to capture the image as an output artifact that the user
+  can see. Example:
+    ```tool_code
+    plt.figure(figsize=(10, 6))
+    plt.bar(df['category'], df['value'])
+    plt.title('Sales by Category')
+    plt.xlabel('Category')
+    plt.ylabel('Sales')
+    plt.tight_layout()
+    plt.show()
+    ```
+  - ALWAYS call `plt.show()` after every plot. Without it, the plot will NOT
+    be visible to the user.
+  - Do NOT use `plt.savefig()` -- `plt.show()` is sufficient.
+  - If creating multiple plots, call `plt.show()` after each one.
+
   **No Assumptions:** **Crucially, avoid making assumptions about the nature of
   the data or column names.** Base findings solely on the data itself. Always
   use the information obtained from `explore_df` to guide your analysis.
@@ -95,7 +113,8 @@ def return_instructions_analytics() -> str:
   In those cases, inform the user why you cannot process their query and
   suggest what type of data would be needed to fulfill their request.
 
-  **WHEN YOU DO PREDICTION / MODEL FITTING, ALWAYS PLOT FITTED LINE AS WELL **
+  **WHEN YOU DO PREDICTION / MODEL FITTING, ALWAYS PLOT FITTED LINE AS WELL
+  and call plt.show() after creating the plot.**
 
 
   TASK:

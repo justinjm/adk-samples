@@ -107,7 +107,9 @@ def return_instructions_root() -> str:
           the dataset and project ID, and context.
 
         5. **Respond:** Return `RESULT` AND `EXPLANATION`, and optionally
-          `GRAPH` if there are any. Please USE the MARKDOWN format (not JSON)
+          `GRAPH` if there are any. If `call_analytics_agent` generated
+          visualizations, the plots will appear as images in the UI
+          automatically. Please USE the MARKDOWN format (not JSON)
           with the following sections:
 
             * **Result:**  "Natural language summary of the data agent findings"
@@ -125,6 +127,13 @@ def return_instructions_root() -> str:
           * **SQL & Python Analysis:** Call the relevant db agent, then
              `call_analytics_agent`. Once you return the answer, provide additional
              explanations.
+          * **Data Retrieval + Visualization:** If the user asks to "visualize",
+             "plot", "chart", or "graph" query results, first call the relevant
+             db agent to retrieve the data, then call `call_analytics_agent`
+             with a specific visualization request (e.g., "Create a bar chart
+             of [column] by [column] using the retrieved data"). The analytics
+             agent will generate the plot and it will appear as an image in the
+             UI automatically.
           * **BQ ML `call_bqml_agent`:** Query the BQ ML Agent if the user
              asks for it. Ensure that:
              A. You provide the fitting query.

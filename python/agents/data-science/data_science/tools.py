@@ -104,6 +104,9 @@ async def call_analytics_agent(
     question_with_data = f"""
   Question to answer: {question}
 
+  IMPORTANT: If you create any matplotlib plots, you MUST call plt.show()
+  as the final step to ensure the plot is captured and visible to the user.
+
   Actual data to analyze this question is available in the following data
   tables:
 
