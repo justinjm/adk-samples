@@ -15,10 +15,11 @@
 """BigQuery ML Agent."""
 
 import os
+from typing import Any
 
 from google.adk.agents import Agent
 from google.adk.agents.callback_context import CallbackContext
-from google.adk.tools import ToolContext
+from google.adk.tools import BaseTool, ToolContext
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.bigquery import BigQueryToolset
 from google.adk.tools.bigquery.config import BigQueryToolConfig, WriteMode
@@ -27,6 +28,7 @@ from data_science.sub_agents.bigquery.agent import bigquery_agent
 from data_science.sub_agents.bigquery.tools import (
     get_database_settings as get_bq_database_settings,
 )
+from data_science.sub_agents.analytics.agent import analytics_agent
 from data_science.sub_agents.bqml.tools import check_bq_models, rag_response
 
 from ...utils.utils import USER_AGENT
@@ -64,6 +66,57 @@ def setup_before_agent_call(callback_context: CallbackContext):
     )
 
 
+def store_results_in_context(
+    tool: BaseTool,
+    args: dict[str, Any],
+    tool_context: ToolContext,
+    tool_response: dict,
+) -> dict | None:
+    """Store execute_sql results in state for the analytics agent to use."""
+    if tool.name == ADK_BUILTIN_BQ_EXECUTE_SQL_TOOL:
+        if tool_response.get("status") == "SUCCESS" and tool_response.get("rows"):
+            tool_context.state["bigquery_query_result"] = tool_response["rows"]
+    return None
+
+
+async def call_analytics_agent(
+    question: str,
+    tool_context: ToolContext,
+):
+    """Tool to call the analytics agent for data visualization and analysis.
+
+    Use this tool when the user asks to visualize, plot, chart, or graph
+    data such as BQML forecast results. Pass the data and a description
+    of the desired visualization.
+    """
+
+    agent_tool = AgentTool(agent=analytics_agent)
+
+    bigquery_data = ""
+    if "bigquery_query_result" in tool_context.state:
+        bigquery_data = tool_context.state["bigquery_query_result"]
+
+    question_with_data = f"""
+  Question to answer: {question}
+
+  IMPORTANT: If you create any matplotlib plots, you MUST call plt.show()
+  as the final step to ensure the plot is captured and visible to the user.
+
+  Actual data to analyze this question is available in the following data
+  tables:
+
+  <BIGQUERY>
+  {bigquery_data}
+  </BIGQUERY>
+  """
+
+    analytics_agent_output = await agent_tool.run_async(
+        args={"request": question_with_data}, tool_context=tool_context
+    )
+    tool_context.state["analytics_agent_output"] = analytics_agent_output
+    return analytics_agent_output
+
+
 async def call_db_agent(
     question: str,
     tool_context: ToolContext,
@@ -93,5 +146,12 @@ root_agent = Agent(
     name="bq_ml_agent",
     instruction=return_instructions_bqml(),
     before_agent_callback=setup_before_agent_call,
-    tools=[bq_execute_sql, check_bq_models, call_db_agent, rag_response],
+    after_tool_callback=store_results_in_context,
+    tools=[
+        bq_execute_sql,
+        check_bq_models,
+        call_db_agent,
+        rag_response,
+        call_analytics_agent,
+    ],
 )
