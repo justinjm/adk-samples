@@ -46,6 +46,7 @@ def return_instructions_bqml() -> str:
             *   `check_bq_models`: Use this tool to list existing BQML models in the specified dataset.
             *   `execute_sql`: Use this tool to run BQML code. **Only use this tool AFTER the user has approved the code.**
             *   `call_db_agent`: Use this tool to execute SQL queries for data exploration and analysis.
+            *   `call_analytics_agent`: Use this tool to visualize data using Python and matplotlib. When the user asks to plot, chart, or visualize BQML results (e.g., forecast data with prediction intervals), first retrieve the data using `execute_sql`, then pass the data along with a specific visualization request to `call_analytics_agent`. The analytics agent will generate the plot and it will appear as an image in the UI automatically.
 
             **IMPORTANT:**
 
