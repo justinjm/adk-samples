@@ -1,0 +1,239 @@
+{
+  "eval_set_id": "data_science_demo_eval_set",
+  "name": "Data Science Agent Demo Evaluation",
+  "description": "Evaluation set covering the core demo questions for the data-science agent: data discovery, schema exploration, visualization, BQML model types, ARIMA_PLUS training, and forecast plotting.",
+  "eval_cases": [
+    {
+      "eval_id": "q1_what_data_do_you_have",
+      "conversation": [
+        {
+          "invocation_id": "inv-001-data-access",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Hi, What data do you have access to?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: I have access to two tables in BigQuery: `train` and `test`. Both contain sticker sales data including date, country, store, product, and number sold."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "q2_train_table_details",
+      "conversation": [
+        {
+          "invocation_id": "inv-002-train-details",
+          "user_content": {
+            "parts": [
+              {
+                "text": "I need more details on the train table. What countries exist? How many stores are there?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: The train table contains data from N countries: [list countries]. There are N distinct stores."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "question": "What are the distinct countries in the train table? How many distinct stores are there?"
+                },
+                "name": "call_db_agent"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "q3_plot_total_sales_per_country",
+      "conversation": [
+        {
+          "invocation_id": "inv-003-sales-plot",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Generate a plot with total sales per country of the train table"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: Here is a bar chart showing total sales (num_sold) aggregated by country from the train table."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "question": "What is the total sales (num_sold) per country in the train table?"
+                },
+                "name": "call_db_agent"
+              },
+              {
+                "args": {},
+                "name": "call_ds_agent"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "q4_bqml_forecasting_models",
+      "conversation": [
+        {
+          "invocation_id": "inv-004-bqml-models",
+          "user_content": {
+            "parts": [
+              {
+                "text": "What kinds of forecasting models can I train in BQML?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: In BigQuery ML you can train the following forecasting models: ARIMA_PLUS, ARIMA_PLUS_XREG. ARIMA_PLUS is the recommended model for univariate time series forecasting..."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "q5_train_arima_plus_model",
+      "conversation": [
+        {
+          "invocation_id": "inv-005-train-arima",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Can you train an ARIMA_PLUS model that forecasts total sales (num_sold) by date from the train table?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: I have successfully trained an ARIMA_PLUS model on the train table. The model forecasts total num_sold aggregated by date."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "question": "Aggregate total num_sold by date from the train table for ARIMA_PLUS training"
+                },
+                "name": "call_db_agent"
+              },
+              {
+                "args": {},
+                "name": "call_ds_agent"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "q6_forecast_timeseries_plot",
+      "conversation": [
+        {
+          "invocation_id": "inv-006-forecast-plot",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Using the model you just trained, generate a time series plot of a forecast for 30 days as well as the upper and lower prediction interval bounds"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "TODO: Fill in the expected agent response. Example: Here is a 30-day forecast plot from the ARIMA_PLUS model, showing the predicted total sales along with the upper and lower prediction interval bounds."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {},
+                "name": "call_ds_agent"
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "data_science",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    }
+  ]
+}
