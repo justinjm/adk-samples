@@ -7,7 +7,7 @@ Sample questions for running a demo of the data science agent.
 * Generate a plot with total sales per country of the train table
 * What kinds of forecasting models can I train in BQML?
 * Can you train an ARIMA_PLUS model that forecasts total sales (num_sold) by date from the train table?
-* Using the model you just trained, generate a time series plot of a forecast for 30 days as well as the upper and lower prediction interval bounds
+* Using that model you just trained, can you generate a time series plot of a forecast for 30 days? and include the upper and lower prediction interval bounds?
 
 
 ```sql
