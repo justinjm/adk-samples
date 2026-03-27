@@ -87,8 +87,8 @@ python3 deploy.py --create
 
 ```txt
 Creating Extension
-Create Extension backing LRO: projects/647233624236/locations/us-central1/extensions/3558200703304335360/operations/7488667465061236736
-Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/3558200703304335360
+Create Extension backing LRO: projects/647233624236/locations/us-central1/extensions/1111111111111/operations/zzzzzzzzzzzzzzz
+Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/1111111111111
 
 
 ```
