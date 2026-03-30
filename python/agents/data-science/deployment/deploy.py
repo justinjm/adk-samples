@@ -208,6 +208,8 @@ def main(argv: list[str]) -> None:  # pylint: disable=unused-argument
         "CODE_INTERPRETER_EXTENSION_NAME",
         "NL2SQL_METHOD",
         "DATASET_CONFIG_FILE",
+        "GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY",
+        "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT"
     ]
 
     skipped_vars: list[str] = []
