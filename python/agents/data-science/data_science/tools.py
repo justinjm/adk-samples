@@ -16,12 +16,105 @@
 
 import logging
 
+from google.adk.agents import Agent
+from google.adk.memory.in_memory_memory_service import InMemoryMemoryService
+from google.adk.runners import Runner
+from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.adk.tools import ToolContext
+from google.adk.tools._forwarding_artifact_service import ForwardingArtifactService
 from google.adk.tools.agent_tool import AgentTool
+from google.adk.utils.context_utils import Aclosing
+from google.genai import types
 
 from .sub_agents import alloydb_agent, analytics_agent, bigquery_agent
 
 logger = logging.getLogger(__name__)
+
+
+async def run_analytics_agent_with_artifacts(
+    agent: Agent,
+    request: str,
+    tool_context: ToolContext,
+) -> str:
+    """Run the analytics agent and capture both text and image artifacts.
+
+    This replaces AgentTool.run_async() for the analytics agent. The standard
+    AgentTool only returns text parts (filtering out images). This function
+    also captures inline image parts from code execution results and saves
+    them as artifacts so they render in the UI.
+    """
+    content = types.Content(
+        role="user",
+        parts=[types.Part.from_text(text=request)],
+    )
+
+    invocation_context = tool_context._invocation_context
+    app_name = invocation_context.app_name or agent.name
+
+    runner = Runner(
+        app_name=app_name,
+        agent=agent,
+        artifact_service=ForwardingArtifactService(tool_context),
+        session_service=InMemorySessionService(),
+        memory_service=InMemoryMemoryService(),
+        credential_service=invocation_context.credential_service,
+        plugins=invocation_context.plugin_manager.plugins,
+    )
+
+    state_dict = {
+        k: v
+        for k, v in tool_context.state.to_dict().items()
+        if not k.startswith("_adk")
+    }
+    session = await runner.session_service.create_session(
+        app_name=app_name,
+        user_id=invocation_context.user_id,
+        state=state_dict,
+    )
+
+    last_content = None
+    image_counter = 0
+
+    async with Aclosing(
+        runner.run_async(
+            user_id=session.user_id,
+            session_id=session.id,
+            new_message=content,
+        )
+    ) as agen:
+        async for event in agen:
+            # Forward state delta to parent session
+            if event.actions.state_delta:
+                tool_context.state.update(event.actions.state_delta)
+            if event.content and event.content.parts:
+                # Save any inline image parts as artifacts
+                for part in event.content.parts:
+                    if part.inline_data and part.inline_data.mime_type and \
+                       part.inline_data.mime_type.startswith("image/"):
+                        image_counter += 1
+                        ext = part.inline_data.mime_type.split("/")[-1]
+                        filename = f"plot_{image_counter}.{ext}"
+                        await tool_context.save_artifact(
+                            filename=filename,
+                            artifact=part,
+                        )
+                        logger.info(
+                            "Saved image artifact: %s (%s)",
+                            filename,
+                            part.inline_data.mime_type,
+                        )
+                if event.content:
+                    last_content = event.content
+
+    await runner.close()
+
+    if last_content is None or last_content.parts is None:
+        return ""
+
+    merged_text = "\n".join(
+        p.text for p in last_content.parts if p.text and not p.thought
+    )
+    return merged_text
 
 
 async def call_bigquery_agent(
@@ -90,9 +183,6 @@ async def call_analytics_agent(
     """
     logger.debug("call_analytics_agent: %s", question)
 
-    # if question == "N/A":
-    #    return tool_context.state["db_agent_output"]
-
     bigquery_data = ""
     alloydb_data = ""
 
@@ -120,10 +210,10 @@ async def call_analytics_agent(
 
   """
 
-    agent_tool = AgentTool(agent=analytics_agent)
-
-    analytics_agent_output = await agent_tool.run_async(
-        args={"request": question_with_data}, tool_context=tool_context
+    analytics_agent_output = await run_analytics_agent_with_artifacts(
+        agent=analytics_agent,
+        request=question_with_data,
+        tool_context=tool_context,
     )
     tool_context.state["analytics_agent_output"] = analytics_agent_output
     return analytics_agent_output

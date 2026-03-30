@@ -14,13 +14,13 @@
 
 """BigQuery ML Agent."""
 
+import logging
 import os
 from typing import Any
 
 from google.adk.agents import Agent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.tools import BaseTool, ToolContext
-from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.bigquery import BigQueryToolset
 from google.adk.tools.bigquery.config import BigQueryToolConfig, WriteMode
 
@@ -33,6 +33,8 @@ from data_science.sub_agents.bqml.tools import check_bq_models, rag_response
 
 from ...utils.utils import USER_AGENT
 from .prompts import return_instructions_bqml
+
+logger = logging.getLogger(__name__)
 
 # BigQuery built-in tools in ADK
 # https://google.github.io/adk-docs/tools/built-in-tools/#bigquery
@@ -90,8 +92,6 @@ async def call_analytics_agent(
     of the desired visualization.
     """
 
-    agent_tool = AgentTool(agent=analytics_agent)
-
     bigquery_data = ""
     if "bigquery_query_result" in tool_context.state:
         bigquery_data = tool_context.state["bigquery_query_result"]
@@ -110,11 +110,15 @@ async def call_analytics_agent(
   </BIGQUERY>
   """
 
-    analytics_agent_output = await agent_tool.run_async(
-        args={"request": question_with_data}, tool_context=tool_context
+    from data_science.tools import run_analytics_agent_with_artifacts
+
+    result = await run_analytics_agent_with_artifacts(
+        agent=analytics_agent,
+        request=question_with_data,
+        tool_context=tool_context,
     )
-    tool_context.state["analytics_agent_output"] = analytics_agent_output
-    return analytics_agent_output
+    tool_context.state["analytics_agent_output"] = result
+    return result
 
 
 async def call_db_agent(
@@ -122,6 +126,7 @@ async def call_db_agent(
     tool_context: ToolContext,
 ):
     """Tool to call database (nl2sql) agent."""
+    from google.adk.tools.agent_tool import AgentTool
 
     agent_tool = AgentTool(agent=bigquery_agent)
     db_agent_output = await agent_tool.run_async(

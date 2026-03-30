@@ -1,6 +1,6 @@
 # TODO 
 
-* [ ] fix plot rendering issue 
+* [x] fix plot rendering issue
 * [ ] add new dataset from generated data 
   * [x] add script to generate new dataset
   * [ ] update dataset config file 
