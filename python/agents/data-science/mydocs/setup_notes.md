@@ -111,13 +111,15 @@ uv run python3 test_deployment.py --resource_id=$RESOURCE_ID --user_id=$USER_ID
 ```
 
 
-## TODO 
-
-* [ ] create env-registration
-* [ ] register new agent to gemini enterprise
 
 ### WIP ==============================================================================
 
+## TODO 
+
+* [ ] create env-registration
+* [ ] IAM setup steps
+  * [ ] give `service-PROJECT=NUMBER@gcp-sa-aiplatform-re.iam.gserviceaccount.com` storage admin 
+* [ ] register new agent to gemini enterprise
 
 ```bash
 cd ../registration/ && source .env-registration
