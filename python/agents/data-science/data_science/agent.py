@@ -183,6 +183,47 @@ def load_database_settings_in_context(callback_context: CallbackContext):
         callback_context.state["database_settings"] = _database_settings
 
 
+def inject_images_after_model(callback_context: CallbackContext, llm_response):
+    """Inject pending image artifacts into the model's response.
+
+    Agent Engine Playground / Gemini Enterprise only render ``inline_data``
+    parts from the **final** model response.  The analytics sub-agent saves
+    plot images as artifacts, but ``AgentTool.run_async()`` discards them
+    (returns text only).  This callback re-attaches the image bytes so they
+    appear in the response that reaches the UI.
+    """
+    pending_images = callback_context.state.get("_pending_images", [])
+    if not pending_images:
+        return None
+
+    # Only inject images into text responses — never into function-call
+    # responses (the callback fires on every model output).
+    if not llm_response.content or not llm_response.content.parts:
+        return None
+    has_text = any(
+        p.text for p in llm_response.content.parts if not getattr(p, "thought", False)
+    )
+    if not has_text:
+        return None
+
+    for img in pending_images:
+        image_bytes = base64.b64decode(img["data_b64"])
+        llm_response.content.parts.append(
+            types.Part.from_bytes(
+                data=image_bytes, mime_type=img.get("mime_type", "image/png")
+            )
+        )
+        _logger.info(
+            "Injected image (%s, %d bytes) into model response",
+            img.get("mime_type"),
+            len(image_bytes),
+        )
+
+    callback_context.state["_pending_images"] = []
+    # Return the modified response explicitly so the framework uses it.
+    return llm_response
+
+
 def get_root_agent() -> LlmAgent:
     tools = [call_analytics_agent]
     sub_agents = []
@@ -207,6 +248,7 @@ def get_root_agent() -> LlmAgent:
         sub_agents=sub_agents,  # type: ignore
         tools=tools,  # type: ignore
         before_agent_callback=load_database_settings_in_context,
+        after_model_callback=inject_images_after_model,
         generate_content_config=types.GenerateContentConfig(temperature=0.01),
     )
 
