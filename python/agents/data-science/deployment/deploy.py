@@ -141,11 +141,12 @@ def create(env_vars: dict[str, str]) -> None:
 
     logger.info("Using agent wheel file: %s", AGENT_WHL_FILE)
 
+
     # https://docs.cloud.google.com/agent-builder/agent-engine/deploy#from-source-files
     # https://docs.cloud.google.com/python/docs/reference/vertexai/latest/vertexai.agent_engines#functions
     remote_agent = agent_engines.create(
         adk_app,    
-        display_name="data_science_agent_demo", # TODO - move to .env
+        display_name="opendoor_data_science_agent_demo",
         requirements=[AGENT_WHL_FILE],
         extra_packages=[AGENT_WHL_FILE],
         env_vars=env_vars,
