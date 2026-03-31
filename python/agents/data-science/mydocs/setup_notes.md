@@ -108,28 +108,26 @@ Copy / paste the final numerical value in the command below and then run it.
 
 ```sh
 export GOOGLE_CLOUD_STORAGE_BUCKET="${PROJECT_ID}-adk-staging" # if error, uncomment and re-run commands
-export RESOURCE_ID=4704379796451229696
+export RESOURCE_ID=2275813697391689728
+```
+
+run test 
+
+```sh
 export USER_ID="user1"
 uv run python3 test_deployment.py --resource_id=$RESOURCE_ID --user_id=$USER_ID
 ```
 
 
+### Register Agent in Gemini Enterprise 
 
-### WIP ==============================================================================
-
-## TODO 
-
-* [ ] create env-registration
-* [ ] IAM setup steps
-  * [ ] give `service-PROJECT=NUMBER@gcp-sa-aiplatform-re.iam.gserviceaccount.com` storage admin 
-* [ ] register new agent to gemini enterprise
+Load env vars 
 
 ```bash
 cd ../registration/ && source .env-registration
 ```
 
-
-#### Setup 
+set more vars to be sure:
 
 ```sh
 PROJECT_ID=$(gcloud config get-value project)
@@ -139,7 +137,7 @@ export APP_ID="gemini-enterprise-17748970_1774897077936" # ID of agentspace app
 ```
 
 
-#### register agent with agentspace
+#### register agent with gemini enterprise 
 
 Lastly, we register the agent with agentspace by running the below.
 
@@ -169,7 +167,7 @@ curl -X POST \
 }"
 ```
 
-Now the agent should be ready to use in Agentspace.
+Now the agent should be ready to use in Gemini Enterprise.
 
 
 
