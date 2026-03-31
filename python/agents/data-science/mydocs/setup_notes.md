@@ -92,13 +92,11 @@ python3 deploy.py --create
 Creating Extension
 Create Extension backing LRO: projects/647233624236/locations/us-central1/extensions/1111111111111/operations/zzzzzzzzzzzzzzz
 Extension created. Resource name: projects/647233624236/locations/us-central1/extensions/1111111111111
-
-
 ```
 
 ### deployment success
 
-```bash
+```txt
 Successfully created agent: projects/647233624236/locations/us-central1/reasoningEngines/XXXXXXX
 ```
 
@@ -108,7 +106,7 @@ Copy / paste the final numerical value in the command below and then run it.
 
 ```sh
 export GOOGLE_CLOUD_STORAGE_BUCKET="${PROJECT_ID}-adk-staging" # if error, uncomment and re-run commands
-export RESOURCE_ID=2275813697391689728
+export RESOURCE_ID= 
 ```
 
 run test 
@@ -133,7 +131,7 @@ set more vars to be sure:
 PROJECT_ID=$(gcloud config get-value project)
 PROJECT_NUMBER=$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')
 export LOCATION="us-central1"
-export APP_ID="gemini-enterprise-17748970_1774897077936" # ID of agentspace app 
+export APP_ID="gemini-enterprise-17748970_1774897077936" # ID of agentspace app - set in .env reg 
 ```
 
 
