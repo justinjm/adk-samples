@@ -44,6 +44,7 @@ from .sub_agents.alloydb.tools import (
 from .sub_agents.bigquery.tools import (
     get_database_settings as get_bq_database_settings,
 )
+from .callbacks import inject_images_after_model
 from .tools import call_alloydb_agent, call_analytics_agent, call_bigquery_agent
 
 # Configure Weave endpoint and authentication
@@ -207,6 +208,7 @@ def get_root_agent() -> LlmAgent:
         sub_agents=sub_agents,  # type: ignore
         tools=tools,  # type: ignore
         before_agent_callback=load_database_settings_in_context,
+        after_model_callback=inject_images_after_model,
         generate_content_config=types.GenerateContentConfig(temperature=0.01),
     )
 

@@ -14,6 +14,7 @@
 
 """Tools for the ADK Sampmles Data Science Agent."""
 
+import base64
 import logging
 
 from google.adk.tools import ToolContext
@@ -126,4 +127,37 @@ async def call_analytics_agent(
         args={"request": question_with_data}, tool_context=tool_context
     )
     tool_context.state["analytics_agent_output"] = analytics_agent_output
+
+    # Capture image artifacts so they can be injected into the root agent's
+    # final response.  Agent Engine Playground / Gemini Enterprise only
+    # render inline_data parts from the final model response — they cannot
+    # resolve artifact filenames like "code_execution_image_1.png".
+    #
+    # Image bytes are base64-encoded before storing in session state so they
+    # survive JSON serialization by VertexAiSessionService.
+    pending_images = []
+    for filename in tool_context._event_actions.artifact_delta:
+        if any(
+            filename.lower().endswith(ext)
+            for ext in (".png", ".jpg", ".jpeg", ".gif", ".webp")
+        ):
+            artifact = await tool_context.load_artifact(filename)
+            if artifact and artifact.inline_data and artifact.inline_data.data:
+                pending_images.append(
+                    {
+                        "data_b64": base64.b64encode(
+                            artifact.inline_data.data
+                        ).decode("ascii"),
+                        "mime_type": artifact.inline_data.mime_type
+                        or "image/png",
+                    }
+                )
+                logger.info(
+                    "Captured image artifact %s (%s) for injection",
+                    filename,
+                    artifact.inline_data.mime_type,
+                )
+    if pending_images:
+        tool_context.state["_pending_images"] = pending_images
+
     return analytics_agent_output

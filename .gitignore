@@ -208,7 +208,7 @@ python/agents/personalized-shopping/personalized_shopping/shared_libraries/searc
 # Local 'adk web' logs
 adk_web_log.txt
 adk_web_log*.txt
-python/agents/data-science/adk_logs/* 
+python/agents/data-science/adk_logs/*
 
 # Local binary directories
 bin/
