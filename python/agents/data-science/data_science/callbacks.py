@@ -68,15 +68,26 @@ def inject_images_after_model(callback_context: CallbackContext, llm_response):
         mime = img.get("mime_type", "image/png")
         image_data_uris.append(f"data:{mime};base64,{img['data_b64']}")
 
-    # Walk through parts, replacing _IMAGE_REFERENCE_ markdown with data URIs
-    # and dropping any parts that consist *only* of an image reference.
+    # Walk through parts, replacing _IMAGE_REFERENCE_ markdown with data URIs.
     new_parts = []
     uri_idx = 0
     for part in llm_response.content.parts:
-        if not part.text or "_IMAGE_REFERENCE_" not in part.text:
+        # Keep non-text parts as-is
+        if not part.text:
+            new_parts.append(part)
+            continue
+        
+        # Skip thought parts
+        if getattr(part, "thought", False):
             new_parts.append(part)
             continue
 
+        # If this part doesn't contain image references, keep it as-is
+        if "_IMAGE_REFERENCE_" not in part.text:
+            new_parts.append(part)
+            continue
+
+        # Replace image references with data URIs
         def _replace_ref(match):
             nonlocal uri_idx
             alt_text = match.group(1) or "image"
@@ -87,20 +98,16 @@ def inject_images_after_model(callback_context: CallbackContext, llm_response):
             return match.group(0)  # no image available, keep original
 
         replaced = _IMAGE_REF_RE.sub(_replace_ref, part.text)
+        
+        # Always keep the part with replaced text (even if it's only an image)
+        new_parts.append(types.Part.from_text(text=replaced))
 
-        stripped = replaced.strip()
-        if stripped:
-            new_parts.append(types.Part.from_text(text=replaced))
-
-    # Also append inline_data parts for UIs that render them natively
-    # (e.g. adk web's generated-image-container).
-    for img in pending_images:
-        image_bytes = base64.b64decode(img["data_b64"])
-        mime = img.get("mime_type", "image/png")
-        new_parts.append(types.Part.from_bytes(data=image_bytes, mime_type=mime))
+    # NOTE: Not appending inline_data parts to avoid duplicate images in
+    # Gemini Enterprise, which properly renders data URI markdown images.
+    # If other UIs need inline_data parts, this can be made configurable.
 
     logger.info(
-        "Injected %d image(s) into model response (data-URI + inline_data)",
+        "Injected %d image(s) into model response (data-URI markdown only)",
         len(pending_images),
     )
 
