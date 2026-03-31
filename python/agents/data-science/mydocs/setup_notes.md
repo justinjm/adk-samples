@@ -108,7 +108,7 @@ Copy / paste the final numerical value in the command below and then run it.
 
 ```sh
 export GOOGLE_CLOUD_STORAGE_BUCKET="${PROJECT_ID}-adk-staging" # if error, uncomment and re-run commands
-export RESOURCE_ID=3529573612405129216
+export RESOURCE_ID=4704379796451229696
 export USER_ID="user1"
 uv run python3 test_deployment.py --resource_id=$RESOURCE_ID --user_id=$USER_ID
 ```

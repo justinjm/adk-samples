@@ -1,0 +1,9 @@
+{
+  "datasets": [
+    {
+      "type": "bigquery",
+      "name": "opendoor_demo",
+      "description": "This dataset was designed to showcase demos of forecasting housing metrics across zip codes. It is a lightweight, synthetically generated dataset that provides an opportunity to quickly iterate through various model and feature engineering ideas, create visualizations, etc. "
+    }
+  ]
+}

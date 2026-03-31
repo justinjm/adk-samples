@@ -1,5 +1,7 @@
 # DEMO
 
+## sticker sales 
+
 Sample questions for running a demo of the data science agent.
 
 * Hi, What data do you have access to?
@@ -10,6 +12,17 @@ Sample questions for running a demo of the data science agent.
 * Using the model you just trained, generate a forecast of total sales for 30 days and visualize the results as a time series plot. include the upper and lower prediction interval bounds in the plot
 
 
+## housing acquistions 
+
+
+
+* Hi, I need to analyze our recent housing acquisition data. what is the distribution of homes purchased by zip code?
+* Can you train an ARIMA_PLUS model in BigQuery ML to forecast the number of days on market for homes in the 85001 zip code from the `housing_acquisitions` table? 
+* Using the model you just trained, can you generate a time series plot of a forecast for 30 days? and include the upper and lower prediction interval bounds?
+
+
+   
+* bonus: generate a time series plot of an actual and forecast using a joined datasset of  actuals from `housing_acquisitions` table and forecast from `example_forecast` table. include upper and lower prediction interval bounds for the forecast period. 
 
 
 ```sql
