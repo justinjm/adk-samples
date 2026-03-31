@@ -5,7 +5,7 @@
 * hi what data can you access?
 * I need to analyze our recent housing acquisition data. what is the distribution of homes purchased by zip code? and can you also generate a plot for me to visualize?
 * Can you train an ARIMA_PLUS model in BigQuery ML to forecast the number of days on market for homes in the 85001 zip code from the `housing_acquisitions` table? 
-* Using the model you just trained, can you generate a time series plot of a forecast for 30 days? and include the upper and lower prediction interval bounds?
+* Using the model you just trained, can you generate a time series plot of a forecast for 30 days for homes in the 85001 zip code? and include the upper and lower prediction interval bounds?
 * bonus: generate a time series plot of an actual and forecast using a joined datasset of  actuals from `housing_acquisitions` table and forecast from `example_forecast` table. include upper and lower prediction interval bounds for the forecast period. 
 
 
