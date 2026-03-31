@@ -106,7 +106,7 @@ Copy / paste the final numerical value in the command below and then run it.
 
 ```sh
 export GOOGLE_CLOUD_STORAGE_BUCKET="${PROJECT_ID}-adk-staging" # if error, uncomment and re-run commands
-export RESOURCE_ID= 
+export RESOURCE_ID=465366647188750336
 ```
 
 run test 
@@ -172,7 +172,7 @@ Now the agent should be ready to use in Gemini Enterprise.
 #### View agent
 
 ```bash
-export AGENT_RESOURCE_ID=9126253323957889649
+export AGENT_RESOURCE_ID=16215631146437106719
 export AGENT_RESOURCE_NAME="projects/${PROJECT_NUMBER}/locations/global/collections/default_collection/engines/${APP_ID}/assistants/default_assistant/agents/${AGENT_RESOURCE_ID}"
 curl -X GET \
   -H "Authorization: Bearer $(gcloud auth print-access-token)" \

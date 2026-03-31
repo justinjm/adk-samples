@@ -227,3 +227,7 @@ bin/
 go/agents/sail-researcher/researcher
 go/agents/sail-researcher/vendor/*
 go/agents/sail-researcher/server
+
+# my stuff
+python/agents/data-science/mydocs/demo-local-backup/*
+
