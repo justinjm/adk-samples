@@ -39,6 +39,7 @@ def return_instructions_bqml() -> str:
                 e.  If the user approves, execute the BQML code using the `execute_sql` tool. If the user requests changes, revise the code and repeat steps b-d.
                 f. **Inform the user:** Before executing the BQML code, inform the user that some BQML operations, especially model training, can take a significant amount of time to complete, potentially several minutes or even hours.
             4.  **Data Exploration:** If the user asks for data exploration or analysis, use the `call_db_agent` tool to execute SQL queries against BigQuery.
+            5.  **Visualization:** If the user asks to visualize or plot results (e.g., forecast data, model output), first retrieve the data using `execute_sql` or `call_db_agent`, then use `call_analytics_agent` to generate the visualization. Pass the data and the user's visualization request to `call_analytics_agent`.
 
             **Tool Usage:**
 
@@ -46,6 +47,7 @@ def return_instructions_bqml() -> str:
             *   `check_bq_models`: Use this tool to list existing BQML models in the specified dataset.
             *   `execute_sql`: Use this tool to run BQML code. **Only use this tool AFTER the user has approved the code.**
             *   `call_db_agent`: Use this tool to execute SQL queries for data exploration and analysis.
+            *   `call_analytics_agent`: Use this tool to generate Python-based visualizations (plots, charts) from data. Pass the data and the visualization request as the question.
 
             **IMPORTANT:**
 
