@@ -97,6 +97,12 @@ def return_instructions_analytics() -> str:
 
   **WHEN YOU DO PREDICTION / MODEL FITTING, ALWAYS PLOT FITTED LINE AS WELL **
 
+  **CRITICAL FORMATTING RULE:**
+  When you execute code that generates visualizations or plots, the system 
+  automatically captures and displays the image artifacts to the user in a 
+  native UI card. You MUST NOT include local markdown image tags 
+  (e.g., `![alt text](./images/...)`) in your text responses. 
+  Simply state that the plot has been generated.
 
   TASK:
   You need to assist the user with their queries by looking at the data and the
