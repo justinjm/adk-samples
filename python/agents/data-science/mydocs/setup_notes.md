@@ -6,10 +6,13 @@ Deployed to agent engine and registered in gemini enterprise agent catalog.
 
 ## get code 
 
-```sh
+```bash
 git clone https://github.com/justinjm/adk-samples.git
 cd adk-samples/python/agents/data-science
-# cd /python/agents/data-science # or if repo already downloaded
+```
+
+```bash
+cd python/agents/data-science # or if repo already downloaded
 ```
 
 #### get code - sparse checkout 
