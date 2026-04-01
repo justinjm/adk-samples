@@ -43,6 +43,31 @@ FROM
     )
 ```
 
+Visualization query
+
+```sql
+SELECT
+  forecast_timestamp AS transaction_date,
+  forecast_value AS avg_days_on_market,
+  prediction_interval_lower_bound,
+  prediction_interval_upper_bound
+FROM
+  ML.FORECAST(
+    MODEL `harborisland-dev.opendoor_demo.days_on_market_forecasting_model`,
+    STRUCT(30 AS horizon, 0.95 AS confidence_level))
+
+UNION ALL
+
+SELECT
+  TIMESTAMP(transaction_date) AS transaction_date,
+  avg_days_on_market,
+  CAST(NULL AS FLOAT64) AS prediction_interval_lower_bound,
+  CAST(NULL AS FLOAT64) AS prediction_interval_upper_bound
+FROM `harborisland-dev.opendoor_demo.housing_acquisitions`
+WHERE zip_code = '85001' AND transaction_date > '2026-01-01'
+ORDER BY transaction_date ASC
+```
+
 ## sticker sales dataset
 
 Sample questions for running a demo on the sticker sales forecasting
