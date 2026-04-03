@@ -1,6 +1,6 @@
 # DEMO
 
-## housing acquistions 
+## housing acquistions sample questions 
 
 * hi what data can you access?
 * I need to analyze our recent housing acquisition data. what is the distribution of homes purchased by zip code? and can you also generate a plot for me to visualize?
@@ -8,8 +8,7 @@
 * Using the model you just trained, can you generate a time series plot of a forecast for 30 days? and include the upper and lower prediction interval bounds?
 * **Bonus:** generate a time series plot of an actual and forecast using a joined datasset of  actuals from `housing_acquisitions` table and forecast from `example_forecast` table. include upper and lower prediction interval bounds for the forecast period. 
 
-
-example successful query:
+### Model training example query
 
 ```sql
 CREATE OR REPLACE MODEL `harborisland-dev.opendoor_demo.arima_plus_model`
@@ -29,6 +28,7 @@ WHERE
   zip_code = '85001'
 ```
 
+### Model Inference / Forecasting example query
 
 ```sql
 SELECT 
@@ -43,7 +43,7 @@ FROM
     )
 ```
 
-Visualization query
+### Time series visualization query
 
 ```sql
 SELECT
@@ -68,7 +68,7 @@ WHERE zip_code = '85001' AND transaction_date > '2026-01-01'
 ORDER BY transaction_date ASC
 ```
 
-## sticker sales dataset
+## sticker sales sample questions
 
 Sample questions for running a demo on the sticker sales forecasting
 
