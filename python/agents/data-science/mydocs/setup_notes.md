@@ -17,7 +17,7 @@ Deploy a data science agent with BigQuery data to Vertex AI Agent Engine and reg
 ```bash
 # Clone and navigate to project
 git clone https://github.com/justinjm/adk-samples.git
-cd adk-samples/python/agents/data-science
+cd python/agents/data-science
 
 # Set up environment
 uv sync
