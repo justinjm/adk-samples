@@ -143,7 +143,10 @@ env.bak/
 venv.bak/
 .env*
 !.env.example
+!.env-example
 !.env.local.example
+!*.env-example
+!*_env-example.*
 
 # Spyder project settings
 .spyderproject

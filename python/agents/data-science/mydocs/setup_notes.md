@@ -24,7 +24,7 @@ uv sync
 source .venv/bin/activate
 
 # Configure environment variables
-cp .env-example .env 
+cp .env.example .env 
 # cp toolbox.env-example .toolbox.env # TODO - confirm?
 # Edit .env with your values
 cp registration/.env-registration-example registration/.env-registration
