@@ -66,6 +66,14 @@ uv run adk web
 
 ## Deployment
 
+### Setup BigQuery data 
+
+Run script to create a synthetic dataset and then upload it to BigQuery:
+
+```bash
+python3 myutils/generate_upload_data.py
+```  
+
 ### Build Agent Package
 
 From the `data-science` directory:
@@ -84,6 +92,7 @@ python3 deploy.py --create
 ```
 
 **Expected output:**
+
 ```
 Creating Extension
 Create Extension backing LRO: projects/.../locations/us-central1/extensions/.../operations/...
