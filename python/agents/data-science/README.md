@@ -1,6 +1,6 @@
 # Data Science with Multiple Agents
 
-See [mydocs](python/agents/data-science/mydocs/README.md) for a BQ only agent example.
+See [mydocs](mydocs/README.md) for a BQ only agent example.
 
 ## :star: :star: MAJOR UPDATE :star: :star:
 
